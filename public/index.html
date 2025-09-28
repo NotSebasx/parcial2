@@ -1,132 +1,74 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sistema de Órdenes · Restaurante</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin:0; background:#f5f5f5; }
-    header, footer { background:#b71c1c; color:white; padding:1rem; text-align:center; }
-    main { max-width:900px; margin:2rem auto; background:white; border-radius:8px; padding:2rem; box-shadow:0 0 10px rgba(0,0,0,0.1); }
-    h1 { margin-top:0; }
-    .bloque, .tarjeta { border:1px solid #ddd; padding:1rem; margin-bottom:1.5rem; border-radius:6px; background:#fafafa; }
-    label { display:block; margin:0.5rem 0; }
-    input { width:100%; padding:0.5rem; margin-top:0.2rem; border-radius:4px; border:1px solid #ccc; }
-    button { background:#b71c1c; color:white; padding:0.5rem 1rem; border:none; border-radius:4px; cursor:pointer; margin-top:0.5rem; }
-    button:hover { background:#d32f2f; }
-    .oculto { display:none; }
-    .orden { border:1px solid #ccc; padding:0.8rem; margin:0.5rem 0; border-radius:5px; background:#fff3e0; }
-    .orden strong { color:#333; }
-  </style>
-</head>
-<body>
-  <div class="layout">
-    <header>
-      <h1>Sistema de Órdenes</h1>
-      <p id="estado"></p>
-    </header>
-
-    <main>
-      <section id="acceso">
-        <h2>Acceso de Clientes</h2>
-
-        <article class="bloque">
-          <h3>Crear cuenta</h3>
-          <form id="registro-form">
-            <label>Nombre completo<input id="reg-nombre" required></label>
-            <label>Correo electrónico<input id="reg-correo" type="email" required></label>
-            <label>Teléfono<input id="reg-telefono" required></label>
-            <button type="submit">Crear usuario</button>
-          </form>
-        </article>
-
-        <article class="bloque">
-          <h3>Ingreso rápido</h3>
-          <form id="login-form">
-            <label>Correo<input id="log-correo" type="email" required></label>
-            <label>Teléfono<input id="log-telefono" required></label>
-            <button type="submit">Entrar al sistema</button>
-          </form>
-        </article>
-      </section>
-
-      <section id="panel" class="oculto">
-        <h2 id="mensaje-bienvenida"></h2>
-
-        <article class="tarjeta">
-          <h3>Agregar nueva orden</h3>
-          <form id="orden-form">
-            <label>Nombre del platillo<input id="orden-plato" placeholder="Ejemplo: Pizza Margarita" required></label>
-            <label>Observaciones o extras<input id="orden-extras" placeholder="Sin queso, extra salsa"></label>
-            <button type="submit">Guardar orden</button>
-          </form>
-        </article>
-
-        <article class="tarjeta">
-          <h3>Listado de mis órdenes</h3>
-          <div id="ordenes-lista">
-            <!-- Órdenes precargadas -->
-            <div class="orden"><strong>Platillo:</strong> Pizza Margarita <br><strong>Extras:</strong> Sin queso</div>
-            <div class="orden"><strong>Platillo:</strong> Hamburguesa Clásica <br><strong>Extras:</strong> Extra salsa barbacoa</div>
-          </div>
-        </article>
-      </section>
-    </main>
-
-    <footer>
-      <small>© 2025 · Restaurante Online</small>
-    </footer>
+<article class="tarjeta">
+  <h3>Listado de mis órdenes</h3>
+  <div id="ordenes-lista">
+    <!-- Órdenes precargadas -->
+    <div class="orden" data-estado="Pendiente">
+      <strong>Platillo:</strong> Pizza Margarita <br>
+      <strong>Extras:</strong> Sin queso <br>
+      <label>Estado:
+        <select class="estado">
+          <option value="Pendiente">Pendiente</option>
+          <option value="En preparación">En preparación</option>
+          <option value="Listo">Listo</option>
+        </select>
+      </label>
+    </div>
+    <div class="orden" data-estado="En preparación">
+      <strong>Platillo:</strong> Hamburguesa Clásica <br>
+      <strong>Extras:</strong> Extra salsa barbacoa <br>
+      <label>Estado:
+        <select class="estado">
+          <option value="Pendiente">Pendiente</option>
+          <option value="En preparación" selected>En preparación</option>
+          <option value="Listo">Listo</option>
+        </select>
+      </label>
+    </div>
   </div>
+</article>
 
-  <script>
-    const $ = (sel) => document.querySelector(sel);
+<style>
+  .orden[data-estado="Pendiente"] { background:#fff9c4; }      /* amarillo */
+  .orden[data-estado="En preparación"] { background:#ffe0b2; } /* naranja */
+  .orden[data-estado="Listo"] { background:#c8e6c9; }          /* verde */
+</style>
 
-    const state = { cliente: null };
+<script>
+  function crearOrden(plato, extras, estado="Pendiente") {
+    const div = document.createElement('div');
+    div.className = 'orden';
+    div.dataset.estado = estado;
+    div.innerHTML = `
+      <strong>Platillo:</strong> ${plato} <br>
+      <strong>Extras:</strong> ${extras} <br>
+      <label>Estado:
+        <select class="estado">
+          <option value="Pendiente" ${estado==="Pendiente"?"selected":""}>Pendiente</option>
+          <option value="En preparación" ${estado==="En preparación"?"selected":""}>En preparación</option>
+          <option value="Listo" ${estado==="Listo"?"selected":""}>Listo</option>
+        </select>
+      </label>
+    `;
+    $('#ordenes-lista').appendChild(div);
+  }
 
-    function setStatus(msg){ $('#estado').textContent = msg || ''; }
+  // Agregar nueva orden
+  $('#orden-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const plato = $('#orden-plato').value;
+    const extras = $('#orden-extras').value;
+    crearOrden(plato, extras);
+    $('#orden-plato').value = '';
+    $('#orden-extras').value = '';
+  });
 
-    function showApp(){
-      $('#acceso').classList.add('oculto');
-      $('#panel').classList.remove('oculto');
-      $('#mensaje-bienvenida').textContent = `Bienvenido ${state.cliente.nombre}`;
+  // Cambiar estado con actualización visual
+  $('#ordenes-lista').addEventListener('change', e => {
+    if(e.target.classList.contains('estado')){
+      const divOrden = e.target.closest('.orden');
+      const nuevoEstado = e.target.value;
+      divOrden.dataset.estado = nuevoEstado;
+      setStatus(`Estado de "${divOrden.querySelector('strong').textContent}" actualizado a: ${nuevoEstado}`);
     }
-
-    // Registro
-    $('#registro-form').addEventListener('submit', e => {
-      e.preventDefault();
-      state.cliente = { 
-        nombre: $('#reg-nombre').value,
-        correo: $('#reg-correo').value,
-        telefono: $('#reg-telefono').value
-      };
-      setStatus(`Usuario creado: ${state.cliente.nombre}`);
-      showApp();
-    });
-
-    // Login
-    $('#login-form').addEventListener('submit', e => {
-      e.preventDefault();
-      state.cliente = { 
-        nombre: "Usuario", // Aquí puedes simular que traes el nombre de la base
-        correo: $('#log-correo').value,
-        telefono: $('#log-telefono').value
-      };
-      setStatus(`Bienvenido: ${state.cliente.nombre}`);
-      showApp();
-    });
-
-    // Agregar nueva orden
-    $('#orden-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const plato = $('#orden-plato').value;
-      const extras = $('#orden-extras').value;
-      const div = document.createElement('div');
-      div.className = 'orden';
-      div.innerHTML = `<strong>Platillo:</strong> ${plato} <br><strong>Extras:</strong> ${extras}`;
-      $('#ordenes-lista').appendChild(div);
-      $('#orden-plato').value = '';
-      $('#orden-extras').value = '';
-    });
-  </script>
-</body>
-</html>
+  });
+</script>
