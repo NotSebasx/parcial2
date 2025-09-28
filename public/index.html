@@ -1,74 +1,70 @@
-<article class="tarjeta">
-  <h3>Listado de mis órdenes</h3>
-  <div id="ordenes-lista">
-    <!-- Órdenes precargadas -->
-    <div class="orden" data-estado="Pendiente">
-      <strong>Platillo:</strong> Pizza Margarita <br>
-      <strong>Extras:</strong> Sin queso <br>
-      <label>Estado:
-        <select class="estado">
-          <option value="Pendiente">Pendiente</option>
-          <option value="En preparación">En preparación</option>
-          <option value="Listo">Listo</option>
-        </select>
-      </label>
-    </div>
-    <div class="orden" data-estado="En preparación">
-      <strong>Platillo:</strong> Hamburguesa Clásica <br>
-      <strong>Extras:</strong> Extra salsa barbacoa <br>
-      <label>Estado:
-        <select class="estado">
-          <option value="Pendiente">Pendiente</option>
-          <option value="En preparación" selected>En preparación</option>
-          <option value="Listo">Listo</option>
-        </select>
-      </label>
-    </div>
-  </div>
-</article>
-
-<style>
-  .orden[data-estado="Pendiente"] { background:#fff9c4; }      /* amarillo */
-  .orden[data-estado="En preparación"] { background:#ffe0b2; } /* naranja */
-  .orden[data-estado="Listo"] { background:#c8e6c9; }          /* verde */
-</style>
-
 <script>
-  function crearOrden(plato, extras, estado="Pendiente") {
-    const div = document.createElement('div');
-    div.className = 'orden';
-    div.dataset.estado = estado;
-    div.innerHTML = `
-      <strong>Platillo:</strong> ${plato} <br>
-      <strong>Extras:</strong> ${extras} <br>
-      <label>Estado:
-        <select class="estado">
-          <option value="Pendiente" ${estado==="Pendiente"?"selected":""}>Pendiente</option>
-          <option value="En preparación" ${estado==="En preparación"?"selected":""}>En preparación</option>
-          <option value="Listo" ${estado==="Listo"?"selected":""}>Listo</option>
-        </select>
-      </label>
-    `;
-    $('#ordenes-lista').appendChild(div);
+  const $ = (sel) => document.querySelector(sel);
+
+  const state = { cliente: null };
+
+  function setStatus(msg){ $('#estado').textContent = msg || ''; }
+
+  function showApp(){
+    $('#acceso').classList.add('oculto');
+    $('#panel').classList.remove('oculto');
+    $('#mensaje-bienvenida').textContent = `Bienvenido ${state.cliente.nombre}`;
   }
 
-  // Agregar nueva orden
+  // Registro
+  $('#registro-form').addEventListener('submit', e => {
+    e.preventDefault();
+    state.cliente = { 
+      nombre: $('#reg-nombre').value,
+      correo: $('#reg-correo').value,
+      telefono: $('#reg-telefono').value
+    };
+    setStatus(`Usuario creado: ${state.cliente.nombre}`);
+    showApp();
+  });
+
+  // Login
+  $('#login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    state.cliente = { 
+      nombre: "Usuario", // Aquí puedes simular que traes el nombre de la base
+      correo: $('#log-correo').value,
+      telefono: $('#log-telefono').value
+    };
+    setStatus(`Bienvenido: ${state.cliente.nombre}`);
+    showApp();
+  });
+
+  // Agregar nueva orden con estado
   $('#orden-form').addEventListener('submit', e => {
     e.preventDefault();
     const plato = $('#orden-plato').value;
     const extras = $('#orden-extras').value;
-    crearOrden(plato, extras);
+
+    const div = document.createElement('div');
+    div.className = 'orden';
+    div.innerHTML = `
+      <strong>Platillo:</strong> ${plato} <br>
+      <strong>Extras:</strong> ${extras} <br>
+      <strong>Estado:</strong>
+      <select class="estado-orden">
+        <option value="Pendiente" selected>Pendiente</option>
+        <option value="En preparación">En preparación</option>
+        <option value="Listo">Listo</option>
+        <option value="Entregado">Entregado</option>
+      </select>
+    `;
+    
+    $('#ordenes-lista').appendChild(div);
     $('#orden-plato').value = '';
     $('#orden-extras').value = '';
   });
 
-  // Cambiar estado con actualización visual
-  $('#ordenes-lista').addEventListener('change', e => {
-    if(e.target.classList.contains('estado')){
-      const divOrden = e.target.closest('.orden');
-      const nuevoEstado = e.target.value;
-      divOrden.dataset.estado = nuevoEstado;
-      setStatus(`Estado de "${divOrden.querySelector('strong').textContent}" actualizado a: ${nuevoEstado}`);
+  // Actualizar estado de orden (opcional: mostrar mensaje)
+  document.addEventListener('change', e => {
+    if(e.target.classList.contains('estado-orden')){
+      setStatus(`Estado de la orden actualizado a: ${e.target.value}`);
+      setTimeout(() => setStatus(''), 2000); // borrar mensaje después de 2s
     }
   });
 </script>
