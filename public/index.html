@@ -1,80 +1,86 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Restaurante · Órdenes</title>
+  <title>Sistema de Órdenes · Restaurante</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <header>
-    <h1>Restaurante · Órdenes</h1>
-    <p id="status"></p>
-  </header>
+  <div class="layout">
+    <header>
+      <h1>Sistema de Órdenes</h1>
+      <p id="estado"></p>
+    </header>
 
-  <main>
-    <section id="registro">
-      <h2>Registrar cliente</h2>
-      <form id="form-registro">
-        <div class="row">
-          <label>Nombre</label>
-          <input id="r-nombre" required>
-        </div>
-        <div class="row">
-          <label>Email</label>
-          <input id="r-email" type="email" required>
-        </div>
-        <div class="row">
-          <label>Teléfono</label>
-          <input id="r-telefono" required>
-        </div>
-        <button>Registrar</button>
-      </form>
-    </section>
+    <main>
+      <section id="acceso">
+        <h2>Acceso de Clientes</h2>
 
-    <section id="login">
-      <h2>Iniciar sesión</h2>
-      <form id="form-login">
-        <div class="row">
-          <label>Email</label>
-          <input id="l-email" type="email" required>
-        </div>
-        <div class="row">
-          <label>Teléfono</label>
-          <input id="l-telefono" required>
-        </div>
-        <button>Entrar</button>
-      </form>
-    </section>
+        <article class="bloque">
+          <h3>Crear cuenta</h3>
+          <form id="registro-form">
+            <label>
+              Nombre completo
+              <input id="reg-nombre" required>
+            </label>
+            <label>
+              Correo electrónico
+              <input id="reg-correo" type="email" required>
+            </label>
+            <label>
+              Teléfono
+              <input id="reg-telefono" required>
+            </label>
+            <button type="submit">Crear usuario</button>
+          </form>
+        </article>
 
-    <section id="app" class="oculto">
-      <h2 id="saludo"></h2>
+        <article class="bloque">
+          <h3>Ingreso rápido</h3>
+          <form id="login-form">
+            <label>
+              Correo
+              <input id="log-correo" type="email" required>
+            </label>
+            <label>
+              Teléfono
+              <input id="log-telefono" required>
+            </label>
+            <button type="submit">Entrar al sistema</button>
+          </form>
+        </article>
+      </section>
 
-      <div class="card">
-        <h3>Nueva orden</h3>
-        <form id="form-orden">
-          <div class="row">
-            <label>Plato</label>
-            <input id="o-plato" placeholder="Ej. Tacos al pastor" required>
-          </div>
-          <div class="row">
-            <label>Extras</label>
-            <input id="o-extras" placeholder="Sin cebolla, salsa verde">
-          </div>
-          <button>Crear orden</button>
-        </form>
-      </div>
+      <section id="panel" class="oculto">
+        <h2 id="mensaje-bienvenida"></h2>
 
-      <div class="card">
-        <h3>Mis pedidos</h3>
-        <div id="lista"></div>
-      </div>
-    </section>
-  </main>
+        <article class="tarjeta">
+          <h3>Agregar nueva orden</h3>
+          <form id="orden-form">
+            <label>
+              Nombre del platillo
+              <input id="orden-plato" placeholder="Ejemplo: Pizza Margarita" required>
+            </label>
+            <label>
+              Observaciones o extras
+              <input id="orden-extras" placeholder="Sin queso, extra salsa">
+            </label>
+            <button type="submit">Guardar orden</button>
+          </form>
+        </article>
 
-  <footer>
-    <small>© Examen DW · Render</small>
-  </footer>
+        <article class="tarjeta">
+          <h3>Listado de mis órdenes</h3>
+          <div id="ordenes-lista"></div>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <small>© 2025 · Restaurante Online</small>
+    </footer>
+  </div>
 
   <script src="./app.js"></script>
 </body>
