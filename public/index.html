@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Restaurante · Órdenes</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <h1>Restaurante · Órdenes</h1>
+    <p id="status"></p>
+  </header>
+
+  <main>
+    <section id="registro">
+      <h2>Registrar cliente</h2>
+      <form id="form-registro">
+        <div class="row">
+          <label>Nombre</label>
+          <input id="r-nombre" required>
+        </div>
+        <div class="row">
+          <label>Email</label>
+          <input id="r-email" type="email" required>
+        </div>
+        <div class="row">
+          <label>Teléfono</label>
+          <input id="r-telefono" required>
+        </div>
+        <button>Registrar</button>
+      </form>
+    </section>
+
+    <section id="login">
+      <h2>Iniciar sesión</h2>
+      <form id="form-login">
+        <div class="row">
+          <label>Email</label>
+          <input id="l-email" type="email" required>
+        </div>
+        <div class="row">
+          <label>Teléfono</label>
+          <input id="l-telefono" required>
+        </div>
+        <button>Entrar</button>
+      </form>
+    </section>
+
+    <section id="app" class="oculto">
+      <h2 id="saludo"></h2>
+
+      <div class="card">
+        <h3>Nueva orden</h3>
+        <form id="form-orden">
+          <div class="row">
+            <label>Plato</label>
+            <input id="o-plato" placeholder="Ej. Tacos al pastor" required>
+          </div>
+          <div class="row">
+            <label>Extras</label>
+            <input id="o-extras" placeholder="Sin cebolla, salsa verde">
+          </div>
+          <button>Crear orden</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Mis pedidos</h3>
+        <div id="lista"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>© Examen DW · Render</small>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
